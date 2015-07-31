@@ -1,0 +1,24 @@
+{
+  "name": "site-genesis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aupload.js",
+  "dependencies": {
+    "archiver": "^0.14.4",
+    "chokidar": "^1.0.5",
+    "gulp": "^3.9.0",
+    "gulp-changed": "^1.2.1",
+    "gulp-sass": "^2.0.4",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-util": "^3.0.6",
+    "request": "^2.60.0",
+    "request-promise": "^0.4.3",
+    "xml-parser": "^1.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vali0",
+  "license": "MIT"
+}
