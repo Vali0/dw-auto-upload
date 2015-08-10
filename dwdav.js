@@ -2,10 +2,8 @@ var Dwdav = (function() {
     'use strict';
 
     var request = require('request'),
-        parse = require('xml-parser'),
-        fs = require('fs');
-
-    var instance;
+        fs = require('fs'),
+        instance;
 
     function init(config) {
         // Private functions and variables
@@ -13,7 +11,6 @@ var Dwdav = (function() {
         var instanceConfig = config;
 
         function getOpts() {
-
             return {
                 baseUrl: 'https://' + instanceConfig.hostname + '/on/demandware.servlet/webdav/Sites/Cartridges/' + instanceConfig.version,
                 uri: '/',
@@ -26,7 +23,7 @@ var Dwdav = (function() {
         }
 
         function putFile(filePath) {
-            var req,
+            var request,
                 promise,
                 requestOptions = getOpts();
 
@@ -34,7 +31,7 @@ var Dwdav = (function() {
             requestOptions.method = 'PUT';
 
             promise = new Promise(function(resolve, reject) {
-                req = request(requestOptions, function(err, res, body) {
+                request = request(requestOptions, function(err, res, body) {
                     if (err) {
                         return reject(err);
                     }
@@ -42,10 +39,10 @@ var Dwdav = (function() {
                     resolve(body);
                 });
 
-                fs.createReadStream(filePath).pipe(req);
+                fs.createReadStream(filePath).pipe(request);
             });
 
-            promise.request = req;
+            promise.request = request;
 
             return promise;
         }
