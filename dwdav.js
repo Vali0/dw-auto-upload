@@ -1,68 +1,66 @@
 var Dwdav = (function() {
-    'use strict';
+	'use strict';
 
-    var request = require('request'),
-        fs = require('fs'),
-        instance;
+	var request = require('request'),
+		fs = require('fs'),
+		instance;
 
-    function init(config) {
-        // Private functions and variables
+	function init(config) {
+		// Private functions and variables
 
-        var instanceConfig = config;
+		var instanceConfig = config;
 
-        function getOpts() {
-            return {
-                baseUrl: 'https://' + instanceConfig.hostname + '/on/demandware.servlet/webdav/Sites/Cartridges/' + instanceConfig.version,
-                uri: '/',
-                auth: {
-                    user: instanceConfig.username,
-                    password: instanceConfig.password
-                },
-                strictSSL: false
-            };
-        }
+		function getOpts() {
+			return {
+				baseUrl: 'https://' + instanceConfig.hostname + '/on/demandware.servlet/webdav/Sites/Cartridges/' + instanceConfig.version,
+				uri: '/',
+				auth: {
+					user: instanceConfig.username,
+					password: instanceConfig.password
+				},
+				strictSSL: false
+			};
+		}
 
-        function putFile(filePath) {
-            var request,
-                promise,
-                requestOptions = getOpts();
+		function putFile(filePath) {
+			var requestObject,
+				promise,
+				requestOptions = getOpts();
 
-            requestOptions.uri = '/' + filePath;
-            requestOptions.method = 'PUT';
+			requestOptions.uri = '/' + filePath;
+			requestOptions.method = 'PUT';
 
-            promise = new Promise(function(resolve, reject) {
-                request = request(requestOptions, function(err, res, body) {
-                    if (err) {
-                        return reject(err);
-                    }
+			promise = new Promise(function(resolve, reject) {
+				requestObject = request(requestOptions, function(err, res, body) {
+					if (err) {
+						return reject(err);
+					}
 
-                    resolve(body);
-                });
+					resolve(body);
+				});
 
-                fs.createReadStream(filePath).pipe(request);
-            });
+				fs.createReadStream(filePath).pipe(requestObject);
+			});
 
-            promise.request = request;
+			return promise;
+		}
 
-            return promise;
-        }
+		return {
+			// Public functions and variables
 
-        return {
-            // Public functions and variables
+			putFile: putFile
+		};
+	}
 
-            putFile: putFile
-        };
-    }
+	return {
+		getInstance: function(config) {
+			if (!instance) {
+				instance = init(config);
+			}
 
-    return {
-        getInstance: function(config) {
-            if (!instance) {
-                instance = init(config);
-            }
-
-            return instance;
-        }
-    };
+			return instance;
+		}
+	};
 }());
 
 module.exports = Dwdav;
