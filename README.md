@@ -1,1 +1,1 @@
-# npm install git+https://{usr}:{pswd}@bitbucket.org/valentin_radev/dw-auto-upload.git #
+# npm install https://bitbucket.org/valentin_radev/dw-auto-upload.git #
