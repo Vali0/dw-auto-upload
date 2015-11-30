@@ -10,10 +10,11 @@ var Dwdav = (function() {
 
 		var instanceConfig = config;
 
-		function getOpts() {
+		function buildRequestBody(options) {
 			return {
 				baseUrl: 'https://' + instanceConfig.hostname + '/on/demandware.servlet/webdav/Sites/Cartridges/' + instanceConfig.version,
-				uri: '/',
+				uri: options.uri,
+				method: options.method,
 				auth: {
 					user: instanceConfig.username,
 					password: instanceConfig.password
@@ -25,10 +26,10 @@ var Dwdav = (function() {
 		function putFile(filePath) {
 			var requestObject,
 				promise,
-				requestOptions = getOpts();
-
-			requestOptions.uri = '/' + filePath;
-			requestOptions.method = 'PUT';
+				requestOptions = buildRequestBody({
+					uri: '/' + filePath,
+					method: 'PUT'
+				});
 
 			promise = new Promise(function(resolve, reject) {
 				requestObject = request(requestOptions, function(err, res, body) {
@@ -39,7 +40,7 @@ var Dwdav = (function() {
 					resolve(body);
 				});
 
-				fs.createReadStream(filePath).pipe(requestObject);
+				fs.createReadStream(instanceConfig.cwd + '/' + filePath).pipe(requestObject);
 			});
 
 			return promise;
