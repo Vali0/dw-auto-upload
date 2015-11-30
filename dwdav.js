@@ -33,8 +33,8 @@ var Dwdav = (function() {
 
 			promise = new Promise(function(resolve, reject) {
 				requestObject = request(requestOptions, function(err, res, body) {
-					if (err) {
-						return reject(err);
+					if (err || (res.statusCode < 200 || res.statusCode > 300)) {
+						return reject('Error message: ' + err + '\nResponse body: ' + body);
 					}
 
 					resolve(body);
